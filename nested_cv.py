@@ -33,12 +33,12 @@ import json
 #########################################################################################
 
 
-def nested_cv(Estimator, parameter_dict, output_filename, sourcefile, length):
+def nested_cv(Estimator, parameter_dict, output_filename, sourcefile, length, folds):
     df = pd.read_csv(sourcefile)  # data file
     Xr_t = df.iloc[:, 0:length] # number of features to be used
     yr = df['class'] # class label
     print(Xr_t.head())  # Check file
-    outer_folds = pd.read_pickle("DATA/5_fold_split.pkl")  # dataframe with indexes for 5 fold validation
+    outer_folds = pd.read_pickle(folds)  # dataframe with indexes for 5 fold validation
     outer_folds = outer_folds.rename({0: 'Train', 1: 'Test'}, axis='columns')
     # Scaler for train and test data
     scaler = preprocessing.StandardScaler().fit(Xr_t)
@@ -58,9 +58,9 @@ def nested_cv(Estimator, parameter_dict, output_filename, sourcefile, length):
                 accuracy = []
                 roc_auc = []
                 train_set_x_outer = Xk[fold.Train]
-                train_set_y_outer = yr[fold.Train]
+                train_set_y_outer = yr[fold.Train].to_numpy()
                 test_set_x_outer = Xk[fold.Test]
-                test_set_y_outer = yr[fold.Test]
+                test_set_y_outer = yr[fold.Test].to_numpy()
                 # Hyperparameter tuning
                 for p in param_list:
                     # 10 fold Cross Validation
@@ -72,10 +72,10 @@ def nested_cv(Estimator, parameter_dict, output_filename, sourcefile, length):
                     y_pred = []  # Initialize list for predictions on test data
                     y_pred_prob = []  # Initialize list for predictions with probabilities on test data
                     for row in df_g.itertuples():
-                        train_set_x = Xk[row.Train]
-                        train_set_y = yr[row.Train]
-                        test_set_x = Xk[row.Test]
-                        test_set_y = yr[row.Test]
+                        train_set_x = train_set_x_outer[row.Train]
+                        train_set_y = train_set_y_outer[row.Train]
+                        test_set_x = train_set_x_outer[row.Test]
+                        test_set_y = train_set_y_outer[row.Test]
                         for y in test_set_y:
                             y_test.append(y)
                         cv_model = Estimator(**p)
