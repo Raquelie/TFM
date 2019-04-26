@@ -2,7 +2,7 @@
 
 ## TFM_Classifier
 
-Function for experimenting with several clasifiers from Scikit-Learn
+Notebook for experimenting with several clasifiers from Scikit-Learn
 
 ## feature_selection
 
