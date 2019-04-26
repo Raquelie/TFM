@@ -1,4 +1,4 @@
-# Trabajo de fin de máster (MSc Big Data Project)
+# Scripts for classification problems
 
 ## test_classifiers
 
