@@ -1,6 +1,6 @@
 # Trabajo de fin de máster (MSc Big Data Project)
 
-## test_classifier
+## test_classifiers
 
 Notebook for experimenting with several clasifiers from Scikit-Learn
 
